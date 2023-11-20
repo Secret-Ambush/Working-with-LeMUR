@@ -3,18 +3,6 @@ import assemblyai as aai
 text = ""
 aai.settings.api_key = f"c4eeac28c47a41a49602463b427503a0"
 
-def getValues(text):
-    prompt = "Which of the following directions is in the script (Straight/Left/Right)?"
-    result1 = text.lemur.task(prompt)
-    
-    if result1 != "Straight" | "Left" | "Right":
-        result1 == "Stop"
-    
-    prompt2 = "How many units is mentioned in the script? Mention the number only. In case of no number, output 0" 
-    result2 = text.lemur.task(prompt2)
-    
-    print(result1 + " " + result2)
-
 def on_open(session_opened: aai.RealtimeSessionOpened):
     print("Session ID:", session_opened.session_id)
 
@@ -23,7 +11,7 @@ def on_error(error: aai.RealtimeError):
 
 def on_close():
     print("Closing Session")
-    getValues(text)
+    transcriber.close()
     
     
 def on_data(transcript: aai.RealtimeTranscript):
@@ -32,9 +20,13 @@ def on_data(transcript: aai.RealtimeTranscript):
 
     if isinstance(transcript, aai.RealtimeFinalTranscript):
         print(transcript.text, end="\r\n")
-        text = transcript.text
+        questions = [aai.LemurQuestion(question ="Which of the following directions is asked?", answer_options= ["Straight", "Left", "Right"])] 
+        result1 = transcript.lemur.question(questions).response [0].answer
+    
+        if result1 != "Straight" | "Left" | "Right":
+            result1 == "Stop"
+        print(result1)
         on_close()
-        
         
     else:
         print(transcript.text, end="\r")
