@@ -1,6 +1,7 @@
 import pygame
 
 def play_music(file_path):
+    print("Working")
     pygame.init()
     pygame.mixer.init()
     try:
@@ -16,6 +17,7 @@ def play_music(file_path):
         pygame.mixer.quit()
         pygame.quit()
 
+print("Playing")
 # Replace 'file_path' with the path to your MP3 file
-file_path = 'path/to/your/file.mp3'
+file_path = '/Users/bristi/Downloads/generated_audio4.mp3'
 play_music(file_path)
